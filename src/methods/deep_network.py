@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 
 ## MS2
@@ -29,6 +30,15 @@ class MLP(nn.Module):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        self.net = nn.Sequential(
+            nn.Linear(input_size, input_size),
+            nn.ReLU(),
+            nn.Linear(input_size, input_size // 2),
+            nn.ReLU(),
+            nn.Linear(input_size // 2, input_size // 4),
+            nn.ReLU(),
+            nn.Linear(input_size // 4, n_classes)
+        )
 
     def forward(self, x):
         """
@@ -45,6 +55,7 @@ class MLP(nn.Module):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        preds = self.net(x)
         return preds
 
 
@@ -72,6 +83,22 @@ class CNN(nn.Module):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        self.net = nn.Sequential(
+            nn.Conv2d(in_channels=input_channels, out_channels=8, kernel_size=3, padding=1),
+            nn.BatchNorm2d(8),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Flatten(start_dim=1),
+            nn.Linear(1024, 512),
+            nn.ReLU(),
+            nn.Linear(512, 128),
+            nn.ReLU(),
+            nn.Linear(128, n_classes)
+        )
 
     def forward(self, x):
         """
@@ -88,6 +115,7 @@ class CNN(nn.Module):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        preds = self.net(x)
         return preds
 
 
@@ -98,7 +126,7 @@ class Trainer(object):
     It will also serve as an interface between numpy and pytorch.
     """
 
-    def __init__(self, model, lr, epochs, batch_size):
+    def __init__(self, model, lr, epochs, batch_size, cnn):
         """
         Initialize the trainer object for a given model.
 
@@ -112,9 +140,9 @@ class Trainer(object):
         self.epochs = epochs
         self.model = model
         self.batch_size = batch_size
-
+        self.cnn = cnn
         self.criterion = nn.CrossEntropyLoss()
-        self.optimizer = ...  ### WRITE YOUR CODE HERE
+        self.optimizer = optim.Adam(model.parameters(), lr=lr)  ### WRITE YOUR CODE HERE
 
     def train_all(self, dataloader):
         """
@@ -127,11 +155,11 @@ class Trainer(object):
             dataloader (DataLoader): dataloader for training data
         """
         for ep in range(self.epochs):
-            self.train_one_epoch(dataloader)
+            self.train_one_epoch(dataloader, ep)
 
             ### WRITE YOUR CODE HERE if you want to do add else at each epoch
 
-    def train_one_epoch(self, dataloader):
+    def train_one_epoch(self, dataloader, ep):
         """
         Train the model for ONE epoch.
 
@@ -146,6 +174,18 @@ class Trainer(object):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        self.model.train()
+        for it, batch in enumerate(dataloader):
+            x, y = batch
+            if self.cnn:
+                x = x.unsqueeze(1)
+            y = y.to(torch.long)
+            outputs = self.model(x)
+            loss = self.criterion(outputs, y)
+            loss.backward()
+            self.optimizer.step()
+            self.optimizer.zero_grad()
+            print(f"\rEpoch: {ep} Batch: {it+1} Loss: {loss}", end="")
 
     def predict_torch(self, dataloader):
         """
@@ -169,7 +209,16 @@ class Trainer(object):
         #### WRITE YOUR CODE HERE!
         ###
         ##
-        return pred_labels
+        self.model.eval()
+        pred_labels = torch.tensor([])
+        with torch.no_grad():
+            for batch in dataloader:
+                if self.cnn:
+                    x = batch[0].unsqueeze(1)
+                logits = self.model(x)
+                pred_labels = torch.concat([pred_labels, logits], dim = 0)
+
+        return pred_labels.argmax(dim=1)
 
     def fit(self, training_data, training_labels):
         """
