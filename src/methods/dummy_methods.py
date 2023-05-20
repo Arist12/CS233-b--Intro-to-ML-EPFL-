@@ -7,14 +7,14 @@ class DummyClassifier(object):
     """
     This method is a dummy method! It returns a random label for classification.
     """
-    
+
     def __init__(self, arg1, arg2=0):
         """
         Initialization function. This get called when you create a new object of the class.
         The arguments can be used to correctly initialize it.
 
         Arguments:
-            arg1: 
+            arg1:
                 Some dummy argument. As it has no default values, it needs to be given.
             arg2: int (default=0)
                 Some dummy argument. As it has a default value, it is optional.
@@ -24,7 +24,7 @@ class DummyClassifier(object):
         self.arg1 = arg1
         self.arg2 = arg2
         # We can then access them in any function of this class by using `self.arg1`, for example.
-    
+
     def random_predict(self, C, N):
         """
         Generate random classification predictions.
@@ -45,9 +45,9 @@ class DummyClassifier(object):
         """
         Train the model and return predicted labels for training data.
 
-        In the case of the DummyClassifier, this method will return 
+        In the case of the DummyClassifier, this method will return
         random labels.
-        
+
         Arguments:
             training_data (array): training data of shape (N,D)
             training_labels (array): labels of shape (N,)
@@ -68,9 +68,9 @@ class DummyClassifier(object):
         """
         Runs prediction on the test data.
 
-        In the case of the DummyClassifier, this method will return 
+        In the case of the DummyClassifier, this method will return
         random predicted labels.
-        
+
         Arguments:
             test_data (array): test data of shape (N,D)
         Returns:

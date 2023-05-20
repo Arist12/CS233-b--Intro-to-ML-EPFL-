@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch.utils.data import TensorDataset, DataLoader
 
 ## MS2
-    
+
 class MLP(nn.Module):
     """
     An MLP network which does classification.
@@ -15,10 +15,10 @@ class MLP(nn.Module):
     def __init__(self, input_size, n_classes):
         """
         Initialize the network.
-        
+
         You can add arguments if you want, but WITH a default value, e.g.:
             __init__(self, input_size, n_classes, my_arg=32)
-        
+
         Arguments:
             input_size (int): size of the input
             n_classes (int): number of classes to predict
@@ -26,10 +26,10 @@ class MLP(nn.Module):
         super().__init__()
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
-        
+
     def forward(self, x):
         """
         Predict the class of a batch of samples with the model.
@@ -42,7 +42,7 @@ class MLP(nn.Module):
         """
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
         return preds
@@ -58,10 +58,10 @@ class CNN(nn.Module):
     def __init__(self, input_channels, n_classes):
         """
         Initialize the network.
-        
+
         You can add arguments if you want, but WITH a default value, e.g.:
             __init__(self, input_channels, n_classes, my_arg=32)
-        
+
         Arguments:
             input_channels (int): number of channels in the input
             n_classes (int): number of classes to predict
@@ -69,10 +69,10 @@ class CNN(nn.Module):
         super().__init__()
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
-        
+
     def forward(self, x):
         """
         Predict the class of a batch of samples with the model.
@@ -85,7 +85,7 @@ class CNN(nn.Module):
         """
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
         return preds
@@ -118,8 +118,8 @@ class Trainer(object):
 
     def train_all(self, dataloader):
         """
-        Fully train the model over the epochs. 
-        
+        Fully train the model over the epochs.
+
         In each epoch, it calls the functions "train_one_epoch". If you want to
         add something else at each epoch, you can do it here.
 
@@ -143,7 +143,7 @@ class Trainer(object):
         """
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
 
@@ -153,7 +153,7 @@ class Trainer(object):
 
         Hints:
             1. Don't forget to set your model to eval mode, i.e., self.model.eval()!
-            2. You can use torch.no_grad() to turn off gradient computation, 
+            2. You can use torch.no_grad() to turn off gradient computation,
             which can save memory and speed up computation. Simply write:
                 with torch.no_grad():
                     # Write your code here.
@@ -166,11 +166,11 @@ class Trainer(object):
         """
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
         return pred_labels
-    
+
     def fit(self, training_data, training_labels):
         """
         Trains the model, returns predicted labels for training data.
@@ -184,10 +184,10 @@ class Trainer(object):
             pred_labels (array): target of shape (N,)
         """
         # First, prepare data for pytorch
-        train_dataset = TensorDataset(torch.from_numpy(training_data).float(), 
+        train_dataset = TensorDataset(torch.from_numpy(training_data).float(),
                                       torch.from_numpy(training_labels))
         train_dataloader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True)
-        
+
         self.train_all(train_dataloader)
 
         return self.predict(training_data)
@@ -197,7 +197,7 @@ class Trainer(object):
         Runs prediction on the test data.
 
         This serves as an interface between numpy and pytorch.
-        
+
         Arguments:
             test_data (array): test data of shape (N,D)
         Returns:

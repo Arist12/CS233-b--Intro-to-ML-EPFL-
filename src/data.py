@@ -15,7 +15,7 @@ def _load_images_from_directory(dir):
 def load_data(directory):
     """
     Return the dataset as numpy arrays.
-    
+
     Arguments:
         directory (str): path to the dataset directory
     Returns:

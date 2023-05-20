@@ -5,7 +5,7 @@ import numpy as np
 class PCA(object):
     """
     PCA dimensionality reduction class.
-    
+
     Feel free to add more functions to this class if you need,
     but make sure that __init__(), find_principal_components(), and reduce_dimension() work correctly.
     """
@@ -19,9 +19,9 @@ class PCA(object):
             d (int): dimensionality of the reduced space
         """
         self.d = d
-        
+
         # the mean of the training data (will be computed from the training data and saved to this variable)
-        self.mean = None 
+        self.mean = None
         # the principal components (will be computed from the training data and saved to this variable)
         self.W = None
 
@@ -29,7 +29,7 @@ class PCA(object):
         """
         Finds the principal components of the training data and returns the explained variance in percentage.
 
-        IMPORTANT: 
+        IMPORTANT:
             This function should save the mean of the training data and the kept principal components as
             self.mean and self.W, respectively.
 
@@ -40,7 +40,7 @@ class PCA(object):
         """
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
         return exvar
@@ -56,9 +56,9 @@ class PCA(object):
         """
         ##
         ###
-        #### WRITE YOUR CODE HERE! 
+        #### WRITE YOUR CODE HERE!
         ###
         ##
         return data_reduced
-        
+
 

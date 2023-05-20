@@ -16,7 +16,7 @@ def main(args):
     and add your own code, visualization, prints, etc!
 
     Arguments:
-        args (Namespace): arguments that were parsed from the command line (see at the end 
+        args (Namespace): arguments that were parsed from the command line (see at the end
                           of this file). Their value can be accessed as "args.argument".
     """
     ## 1. First, we load our data and flatten the images into vectors
@@ -32,7 +32,7 @@ def main(args):
     if not args.test:
         ### WRITE YOUR CODE HERE
         pass
-    
+
     ### WRITE YOUR CODE HERE to do any other data processing
 
 
@@ -58,22 +58,22 @@ def main(args):
         elif args.nn_type == "cnn":
             ### WRITE YOUR CODE HERE
             ...
-        
+
         summary(model)
 
         # Trainer object
         method_obj = Trainer(model, lr=args.lr, epochs=args.max_iters, batch_size=args.nn_batch_size)
-    
+
     # Follow the "DummyClassifier" example for your methods (MS1)
     elif args.method == "dummy_classifier":
         method_obj =  DummyClassifier(arg1=1, arg2=2)
-    
+
 
     ## 4. Train and evaluate the method
 
     # Fit (:=train) the method on the training data
     preds_train = method_obj.fit(xtrain, ytrain)
-        
+
     # Predict on unseen data
     preds = method_obj.predict(xtest)
 

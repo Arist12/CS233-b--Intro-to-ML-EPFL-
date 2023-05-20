@@ -43,7 +43,7 @@ class TestProject(unittest.TestCase):
     @staticmethod
     def title(msg):
         print(f"\n==============\n> {msg} ...")
-    
+
 
     def test_1_folder_structure(self):
         """Test the framework structure (folder and files)."""
@@ -54,7 +54,7 @@ class TestProject(unittest.TestCase):
         for file in ["main.py", "report.pdf"]:
             with self.subTest(f"Checking file {file}"):
                 self.assertTrue((project_path / file).exists(), f"No file {file} found at {project_path}")
-        
+
         # Source code
         src_path = project_path / "src"
         self.assertTrue(src_path.exists(), f"{src_path} not found")
@@ -69,7 +69,7 @@ class TestProject(unittest.TestCase):
             with self.subTest(f"Checking file methods/{file}"):
                 self.assertTrue((method_path / file).exists(), f"No file {file} found at {method_path}")
 
-    
+
     def _import_and_test(self, name, class_name, *args, **kwargs):
         """Test the import of the method and its functions."""
         # Code structure
@@ -77,7 +77,7 @@ class TestProject(unittest.TestCase):
         method = module.__getattribute__(class_name)(*args, **kwargs)
         for fn in ["fit", "predict"]:
             _ = method.__getattribute__(fn)
-        
+
         # Functions inputs and outputs
         N, D = 10, 3
         training_data = np.random.rand(N, D)
@@ -91,7 +91,7 @@ class TestProject(unittest.TestCase):
             pred_labels = method.predict(test_data)
         self.assertIsInstance(pred_labels, np.ndarray, f"{name}.{class_name}.predict() should output an array, not {type(pred_labels)}")
         self.assertEqual(pred_labels.shape, training_labels.shape, f"{name}.{class_name}.predict() output has wrong shape ({pred_labels.shape} != {training_labels.shape})")
-        
+
         return method
 
 
@@ -101,7 +101,7 @@ class TestProject(unittest.TestCase):
 
         _ = self._import_and_test("dummy_methods", "DummyClassifier",
                                   arg1=1)
-    
+
 
     def test_4a_pca(self):
         self.title("Testing PCA")
@@ -111,7 +111,7 @@ class TestProject(unittest.TestCase):
         pca = module.__getattribute__("PCA")(1)
         for fn in ("find_principal_components", "reduce_dimension"):
             _ = pca.__getattribute__(fn)
-        
+
         # Functions inputs and outputs
         N, D, d = 10, 5, 2
         pca = module.__getattribute__("PCA")(d)
@@ -141,7 +141,7 @@ class TestProject(unittest.TestCase):
         self.assertLess(np.linalg.norm(pca.mean - [1.41, 1.12]), 0.01, f"pca.PCA.find_principal_components() is not working on dummy data")
         self.assertLess(np.linalg.norm(pca.W - [[-0.89], [-0.45]]), 0.01, f"pca.PCA.find_principal_components() is not working on dummy data")
         self.assertLess(np.abs(Y - proj).max(), 0.01, f"pca.PCA.reduce_dimension() is not working on dummy data")
-    
+
 
     def test_4b_deep_network(self):
         self.title("Testing deep-network")
@@ -159,7 +159,7 @@ class TestProject(unittest.TestCase):
         for nn_type in ["MLP", "CNN"]:
             model = module.__getattribute__(nn_type)(D if nn_type == "MLP" else 1, C)
             trainer = module.__getattribute__("Trainer")(model, lr, epochs, bs)
-            
+
             # Functions inputs/outputs
             N = 50
             if nn_type == "MLP":
@@ -194,7 +194,7 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--no-hide', action='store_true', help='Enable printing from the student code')
     args = parser.parse_args()
-    
+
     project_path = Path(".")
 
     dir_name = project_path.absolute().name

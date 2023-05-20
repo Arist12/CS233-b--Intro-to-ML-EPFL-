@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 
 
 # Generaly utilies
@@ -49,7 +49,7 @@ def append_bias_term(data):
 def normalize_fn(data, means, stds):
     """
     Return the normalized data, based on precomputed means and stds.
-    
+
     Arguments:
         data (array): of shape (N,D)
         means (array): of shape (1,D)
@@ -63,7 +63,7 @@ def normalize_fn(data, means, stds):
 def get_n_classes(labels):
     """
     Return the number of classes present in the data labels.
-    
+
     This is approximated by taking the maximum label + 1 (as we count from 0).
     """
     return int(np.max(labels) + 1)
@@ -85,7 +85,7 @@ def macrof1_fn(pred_labels, gt_labels):
     for val in class_ids:
         predpos = (pred_labels == val)
         gtpos = (gt_labels==val)
-        
+
         tp = sum(predpos*gtpos)
         fp = sum(predpos*~gtpos)
         fn = sum(~predpos*gtpos)
