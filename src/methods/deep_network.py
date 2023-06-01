@@ -213,9 +213,10 @@ class Trainer(object):
         pred_labels = torch.tensor([])
         with torch.no_grad():
             for batch in dataloader:
+                batch = batch[0]
                 if self.cnn:
                     batch = batch.unsqueeze(1)
-                logits = self.model(batch[0])
+                logits = self.model(batch)
                 pred_labels = torch.concat([pred_labels, logits], dim = 0)
 
         return pred_labels.argmax(dim=1)
