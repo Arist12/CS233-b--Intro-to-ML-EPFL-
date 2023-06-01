@@ -31,7 +31,7 @@ def main(args):
     ## 2. create a validation set
     if not args.test:
         ### WRITE YOUR CODE HERE
-        xtrain, xval, ytrain, yval = train_test_split(xtrain, ytrain, test_size=args.valid_ratio)
+        xtrain, xtest, ytrain, ytest = train_test_split(xtrain, ytrain, test_size=args.valid_ratio)
 
     # Dimensionality reduction (MS2)
     if args.use_pca:
@@ -40,7 +40,7 @@ def main(args):
         ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
         print(f'The total variance explained by the first {d} principal components is {pca_obj.find_principal_components(xtrain):.3f} %')
         # perform dimension reduction on input data
-        xtrain, xval, xtest = pca_obj.reduce_dimension(xtrain), pca_obj.reduce_dimension(xval), pca_obj.reduce_dimension(xtest)
+        xtrain, xtest = pca_obj.reduce_dimension(xtrain), pca_obj.reduce_dimension(xtest)
 
     ## 3. Initialize the method you want to use.
 

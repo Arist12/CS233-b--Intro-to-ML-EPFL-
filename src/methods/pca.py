@@ -50,10 +50,11 @@ class PCA(object):
         eigvals, eigvecs = np.linalg.eigh(C)
 
         eigvals = eigvals[::-1]
-        eg = eigvals[:d]
+        eg = eigvals[:self.d]
         exvar = np.sum(eg) / np.sum(eigvals) * 100
 
-        self.W = eigvecs[:, :d]
+        eigvecs = eigvecs[:, ::-1]
+        self.W = eigvecs[:, :self.d]
         return exvar
 
     def reduce_dimension(self, data):

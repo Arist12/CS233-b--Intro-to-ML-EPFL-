@@ -126,7 +126,7 @@ class Trainer(object):
     It will also serve as an interface between numpy and pytorch.
     """
 
-    def __init__(self, model, lr, epochs, batch_size, cnn):
+    def __init__(self, model, lr, epochs, batch_size, cnn=None):
         """
         Initialize the trainer object for a given model.
 
@@ -214,8 +214,8 @@ class Trainer(object):
         with torch.no_grad():
             for batch in dataloader:
                 if self.cnn:
-                    x = batch[0].unsqueeze(1)
-                logits = self.model(x)
+                    batch = batch.unsqueeze(1)
+                logits = self.model(batch[0])
                 pred_labels = torch.concat([pred_labels, logits], dim = 0)
 
         return pred_labels.argmax(dim=1)

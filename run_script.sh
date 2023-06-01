@@ -1,0 +1,1 @@
+python main.py --method nn --nn_type mlp --lr 3e-5
