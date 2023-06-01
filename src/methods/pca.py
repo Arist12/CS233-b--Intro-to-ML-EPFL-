@@ -43,6 +43,17 @@ class PCA(object):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        self.mean = np.mean(training_data, axis=0)
+        training_data_tilde = training_data - self.mean
+        C = 1 / training_data.shape[0] * training_data_tilde.T @ training_data_tilde
+
+        eigvals, eigvecs = np.linalg.eigh(C)
+
+        eigvals = eigvals[::-1]
+        eg = eigvals[:d]
+        exvar = np.sum(eg) / np.sum(eigvals) * 100
+
+        self.W = eigvecs[:, :d]
         return exvar
 
     def reduce_dimension(self, data):
@@ -59,6 +70,7 @@ class PCA(object):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        data_reduced = (data - self.mean) @ self.W
         return data_reduced
 
 

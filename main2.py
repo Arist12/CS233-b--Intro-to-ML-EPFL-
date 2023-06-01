@@ -7,6 +7,9 @@ from src.data import load_data
 from src.methods.dummy_methods import DummyClassifier
 from src.methods.pca import PCA
 from src.methods.deep_network import MLP, CNN, Trainer
+from src.methods.kmeans import KMeans
+from src.methods.logistic_regression import LogisticRegression
+from src.methods.svm import SVM
 from src.utils import normalize_fn, append_bias_term, accuracy_fn, macrof1_fn, get_n_classes
 
 from sklearn.model_selection import train_test_split
@@ -21,23 +24,23 @@ def main(args):
                           of this file). Their value can be accessed as "args.argument".
     """
     ## 1. First, we load our data and flatten the images into vectors
+    # train data shape: (3502, 32, 32).
+    # test data shape:  (867, 32, 32).
     xtrain, xtest, ytrain, ytest = load_data(args.data)
 
-    ## 2. Then we must prepare it. This is were you can create a validation set,
-    # Make a validation set
+    ## 2. create a validation set
     if not args.test:
         ### WRITE YOUR CODE HERE
         xtrain, xval, ytrain, yval = train_test_split(xtrain, ytrain, test_size=args.valid_ratio)
-
-    ### WRITE YOUR CODE HERE to do any other data processing
-
 
     # Dimensionality reduction (MS2)
     if args.use_pca:
         print("Using PCA")
         pca_obj = PCA(d=args.pca_d)
         ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
-
+        print(f'The total variance explained by the first {d} principal components is {pca_obj.find_principal_components(xtrain):.3f} %')
+        # perform dimension reduction on input data
+        xtrain, xval, xtest = pca_obj.reduce_dimension(xtrain), pca_obj.reduce_dimension(xval), pca_obj.reduce_dimension(xtest)
 
     ## 3. Initialize the method you want to use.
 
@@ -70,10 +73,14 @@ def main(args):
 
         # Trainer object
         method_obj = Trainer(model, lr=args.lr, epochs=args.max_iters, batch_size=args.nn_batch_size, cnn=cnn)
-
-    # Follow the "DummyClassifier" example for your methods (MS1)
     elif args.method == "dummy_classifier":
         method_obj =  DummyClassifier(arg1=1, arg2=2)
+    elif args.method == "kmeans":
+        method_obj = KMeans(K=args.K, max_iters=args.max_iters)
+    elif args.method == "logistic_regression":
+        method_obj = LogisticRegression(lr=args.lr, max_iters=args.max_iters)
+    elif args.method == "svm":
+        method_obj = SVM(C=args.svm_c, kernel=args.svm_kernel, gamma=args.svm_gamma, degree=args.svm_degree, coef0=args.svm_coef0)
 
 
     ## 4. Train and evaluate the method
