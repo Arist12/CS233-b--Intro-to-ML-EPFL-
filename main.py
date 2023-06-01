@@ -36,9 +36,11 @@ def main(args):
     # Dimensionality reduction (MS2)
     if args.use_pca:
         print("Using PCA")
+        xtrain = xtrain.reshape(xtrain.shape[0], -1)
+        xtest = xtest.reshape(xtest.shape[0], -1)
         pca_obj = PCA(d=args.pca_d)
         ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
-        print(f'The total variance explained by the first {d} principal components is {pca_obj.find_principal_components(xtrain):.3f} %')
+        print(f'The total variance explained by the first {args.pca_d} principal components is {pca_obj.find_principal_components(xtrain):.3f} %')
         # perform dimension reduction on input data
         xtrain, xtest = pca_obj.reduce_dimension(xtrain), pca_obj.reduce_dimension(xtest)
 
