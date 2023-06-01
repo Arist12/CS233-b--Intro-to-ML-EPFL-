@@ -110,7 +110,7 @@ if __name__ == '__main__':
     # Definition of the arguments that can be given through the command line (terminal).
     # If an argument is not given, it will take its default value as defined below.
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data', default="dataset_MS2", type=str, help="the path to wherever you put the data")
+    parser.add_argument('--data', default="dataset_HASYv2", type=str, help="the path to wherever you put the data")
     parser.add_argument('--method', default="dummy_classifier", type=str, help="dummy_classifier / kmeans / logistic_regression / svm / nn (MS2)")
     parser.add_argument('--K', type=int, default=10, help="number of clusters for K-Means")
     parser.add_argument('--lr', type=float, default=1e-5, help="learning rate for methods with learning rate")
