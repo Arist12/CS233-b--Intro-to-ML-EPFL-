@@ -1,1 +1,1 @@
-python main.py --method nn --nn_type cnn --lr 3e-5
+python3 main2.py --method nn --nn_type cnn --lr 3e-5
