@@ -12,7 +12,7 @@ from src.methods.logistic_regression import LogisticRegression
 from src.methods.svm import SVM
 from src.utils import normalize_fn, append_bias_term, accuracy_fn, macrof1_fn, get_n_classes
 
-from sklearn.model_selection import train_test_split
+import time
 
 def main(args):
     """
@@ -26,12 +26,16 @@ def main(args):
     ## 1. First, we load our data and flatten the images into vectors
     # train data shape: (3502, 32, 32).
     # test data shape:  (867, 32, 32).
+    time1 = time.time()
+
     xtrain, xtest, ytrain, ytest = load_data(args.data)
 
     ## 2. create a validation set
     if not args.test:
         ### WRITE YOUR CODE HERE
-        xtrain, xtest, ytrain, ytest = train_test_split(xtrain, ytrain, test_size=args.valid_ratio)
+        valid_num = int(xtrain.shape[0] * args.valid_ratio)
+        xtest, ytest = xtrain[-valid_num:], ytrain[-valid_num:]
+        xtrain, ytrain = xtrain[:-valid_num], ytrain[:-valid_num]
 
     # Dimensionality reduction (MS2)
     if args.use_pca:
@@ -89,9 +93,11 @@ def main(args):
 
     # Fit (:=train) the method on the training data
     preds_train = method_obj.fit(xtrain, ytrain)
+    time2 = time.time()
 
     # Predict on unseen data
     preds = method_obj.predict(xtest)
+    time3 = time.time()
 
 
     ## Report results: performance on train and valid/test sets
@@ -104,7 +110,8 @@ def main(args):
     print(f"Test set:  accuracy = {acc:.3f}% - F1-score = {macrof1:.6f}")
 
     ### WRITE YOUR CODE HERE if you want to add other outputs, visualization, etc.
-
+    print(f"Training Time: {time2-time1:3f}")
+    print(f"Inference Time: {time3-time2:3f}")
 
 if __name__ == '__main__':
     # Definition of the arguments that can be given through the command line (terminal).

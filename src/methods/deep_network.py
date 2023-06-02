@@ -30,14 +30,26 @@ class MLP(nn.Module):
         #### WRITE YOUR CODE HERE!
         ###
         ##
+        self.hidden_size = 1024
         self.net = nn.Sequential(
-            nn.Linear(input_size, input_size),
+            nn.Linear(input_size, self.hidden_size),
             nn.ReLU(),
-            nn.Linear(input_size, input_size // 2),
+            nn.Linear(self.hidden_size, self.hidden_size),
             nn.ReLU(),
-            nn.Linear(input_size // 2, input_size // 4),
+            nn.Linear(self.hidden_size, self.hidden_size),
             nn.ReLU(),
-            nn.Linear(input_size // 4, n_classes)
+            nn.Linear(self.hidden_size, self.hidden_size),
+            nn.ReLU(),
+            nn.Linear(self.hidden_size, n_classes)
+            # nn.Linear(input_size, input_size),
+            # nn.ReLU(),
+            # nn.Linear(input_size, self.hidden_size),
+            # nn.ReLU(),
+            # nn.Linear(self.hidden_size, self.hidden_size),
+            # nn.ReLU(),
+            # nn.Linear(self.hidden_size, 512),
+            # nn.ReLU(),
+            # nn.Linear(512, n_classes)
         )
 
     def forward(self, x):

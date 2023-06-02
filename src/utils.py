@@ -98,3 +98,51 @@ def macrof1_fn(pred_labels, gt_labels):
         macrof1 += 2*(precision*recall)/(precision+recall)
 
     return macrof1/len(class_ids)
+
+def KFold_cross_validation(X, Y, K, method_obj):
+    '''
+    K-Fold Cross validation function for K-NN
+
+    Inputs:
+        X : training data, shape (NxD)
+        Y: training labels, shape (N,)
+        K: number of folds (K in K-fold)
+    Returns:
+        Average validation accuracy for the selected k.
+    '''
+    N = X.shape[0]
+    accuracies = []  # list of accuracies
+    F1 = []
+
+    for fold_ind in range(K):
+        #Split the data into training and validation folds:
+
+        #all the indices of the training dataset
+        all_ind = np.arange(N)
+        split_size = N // K
+
+        # Indices of the validation and training examples
+        val_ind = all_ind[fold_ind * split_size : (fold_ind + 1) * split_size]
+        ## YOUR CODE HERE (hint: np.setdiff1d is your friend)
+        train_ind = np.setdiff1d(all_ind, val_ind)
+
+        X_train_fold = X[train_ind, :]
+        Y_train_fold = Y[train_ind]
+        X_val_fold = X[val_ind, :]
+        Y_val_fold = Y[val_ind]
+
+        method_obj.fit(X_train_fold, Y_train_fold)
+        preds = method_obj.predict(X_val_fold)
+
+        acc = accuracy_fn(preds, Y_val_fold)
+        print(acc)
+        macrof1 = macrof1_fn(preds, Y_val_fold)
+        accuracies.append(acc)
+        F1.append(macrof1)
+
+    #Find the average validation accuracy over K:
+    ave_acc = sum(accuracies) / K
+    avg_f1 = sum(F1) / K
+    print(f"Test set:  accuracy = {ave_acc:.3f}% - F1-score = {avg_f1:.6f}")
+
+    return
