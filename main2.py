@@ -26,9 +26,18 @@ def main(args):
     ## 1. First, we load our data and flatten the images into vectors
     # train data shape: (3502, 32, 32).
     # test data shape:  (867, 32, 32).
-    time1 = time.time()
 
     xtrain, xtest, ytrain, ytest = load_data(args.data)
+    if args.method != 'nn' or args.nn_type == 'mlp':
+        # data preparation
+        xtrain = xtrain.reshape(xtrain.shape[0], -1)
+        xtest = xtest.reshape(xtest.shape[0], -1)
+
+        if args.normalize:
+            means, stds = xtrain.mean(axis=0), xtrain.std(axis=0)
+            xtrain, xtest = normalize_fn(xtrain, means, stds), normalize_fn(xtest, means, stds)
+        if args.append_bias:
+            xtrain, xtest = append_bias_term(xtrain), append_bias_term(xtest)
 
     ## 2. create a validation set
     if not args.test:
@@ -40,14 +49,12 @@ def main(args):
     # Dimensionality reduction (MS2)
     if args.use_pca:
         print("Using PCA")
-        xtrain = xtrain.reshape(xtrain.shape[0], -1)
-        xtest = xtest.reshape(xtest.shape[0], -1)
         pca_obj = PCA(d=args.pca_d)
         ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
         print(f'The total variance explained by the first {args.pca_d} principal components is {pca_obj.find_principal_components(xtrain):.3f} %')
         # perform dimension reduction on input data
         xtrain, xtest = pca_obj.reduce_dimension(xtrain), pca_obj.reduce_dimension(xtest)
-
+        print(xtrain.shape, xtest.shape)
     ## 3. Initialize the method you want to use.
 
     # Neural Networks (MS2)
@@ -57,15 +64,6 @@ def main(args):
         # Note: you might need to reshape the image data depending on the network you use!
         n_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
-            # data preparation
-            xtrain = xtrain.reshape(xtrain.shape[0], -1)
-            xtest = xtest.reshape(xtest.shape[0], -1)
-
-            if args.normalize:
-                means, stds = xtrain.mean(axis=0), xtrain.std(axis=0)
-                xtrain, xtest = normalize_fn(xtrain, means, stds), normalize_fn(xtest, means, stds)
-            if args.append_bias:
-                xtrain, xtest = append_bias_term(xtrain), append_bias_term(xtest)
 
             cnn = False
             model = MLP(input_size=xtrain.shape[-1], n_classes=n_classes)  ### WRITE YOUR CODE HERE
@@ -92,6 +90,7 @@ def main(args):
     ## 4. Train and evaluate the method
 
     # Fit (:=train) the method on the training data
+    time1 = time.time()
     preds_train = method_obj.fit(xtrain, ytrain)
     time2 = time.time()
 

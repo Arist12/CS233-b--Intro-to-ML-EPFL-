@@ -9,6 +9,7 @@ from src.methods.dummy_methods import DummyClassifier
 from src.methods.kmeans import KMeans
 from src.methods.logistic_regression import LogisticRegression
 from src.methods.svm import SVM
+from src.methods.pca import PCA
 from src.utils import normalize_fn, append_bias_term, accuracy_fn, macrof1_fn, KFold_cross_validation
 
 
@@ -41,8 +42,14 @@ def main(args):
 
     # Dimensionality reduction (FOR MS2!)
     if args.use_pca:
-        raise NotImplementedError("This will be useful for MS2.")
-
+        print("Using PCA")
+        xtrain = xtrain.reshape(xtrain.shape[0], -1)
+        xtest = xtest.reshape(xtest.shape[0], -1)
+        pca_obj = PCA(d=args.pca_d)
+        ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
+        print(f'The total variance explained by the first {args.pca_d} principal components is {pca_obj.find_principal_components(xtrain):.3f} %')
+        # perform dimension reduction on input data
+        xtrain, xtest = pca_obj.reduce_dimension(xtrain), pca_obj.reduce_dimension(xtest)
     ## 3. Initialize the method you want to use.
 
     # Use NN (FOR MS2!)

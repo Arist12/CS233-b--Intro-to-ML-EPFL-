@@ -30,7 +30,7 @@ class MLP(nn.Module):
         #### WRITE YOUR CODE HERE!
         ###
         ##
-        self.hidden_size = 1024
+        self.hidden_size = 512
         self.net = nn.Sequential(
             nn.Linear(input_size, self.hidden_size),
             nn.ReLU(),
@@ -38,8 +38,8 @@ class MLP(nn.Module):
             nn.ReLU(),
             nn.Linear(self.hidden_size, self.hidden_size),
             nn.ReLU(),
-            nn.Linear(self.hidden_size, self.hidden_size),
-            nn.ReLU(),
+            # nn.Linear(self.hidden_size, self.hidden_size),
+            # nn.ReLU(),
             nn.Linear(self.hidden_size, n_classes)
             # nn.Linear(input_size, input_size),
             # nn.ReLU(),
@@ -96,14 +96,14 @@ class CNN(nn.Module):
         ###
         ##
         self.net = nn.Sequential(
-            nn.Conv2d(in_channels=input_channels, out_channels=8, kernel_size=3, padding=1),
+            nn.Conv2d(in_channels=input_channels, out_channels=8, kernel_size=7, padding=3),
             nn.BatchNorm2d(8),
             nn.ReLU(),
-            nn.MaxPool2d(2),
-            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1),
+            nn.AvgPool2d(2),
+            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=7, padding=3),
             nn.BatchNorm2d(16),
             nn.ReLU(),
-            nn.MaxPool2d(2),
+            nn.AvgPool2d(2),
             nn.Flatten(start_dim=1),
             nn.Linear(1024, 512),
             nn.ReLU(),
