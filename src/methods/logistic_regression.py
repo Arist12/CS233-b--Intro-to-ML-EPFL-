@@ -2,6 +2,7 @@ import numpy as np
 
 from ..utils import get_n_classes, label_to_onehot, onehot_to_label, accuracy_fn
 
+
 class LogisticRegression(object):
     """
     Logistic regression classifier.
@@ -36,7 +37,9 @@ class LogisticRegression(object):
         self.weights = np.random.normal(0, 0.1, (D, C))
 
         for it in range(self.max_iters):
-            gradient = training_data.T @ (self.f_softmax(training_data, self.weights) - labels)
+            gradient = training_data.T @ (
+                self.f_softmax(training_data, self.weights) - labels
+            )
             self.weights -= self.lr * gradient
 
             predictions = self.predict(training_data)
@@ -44,7 +47,9 @@ class LogisticRegression(object):
                 break
 
             if it % 10 == 0:
-                print(f'training loss at iteration {it}: {self.loss_logistic_multi(training_data, labels, self.weights)}')
+                print(
+                    f"training loss at iteration {it}: {self.loss_logistic_multi(training_data, labels, self.weights)}"
+                )
         return self.predict(training_data)
 
     def predict(self, test_data):

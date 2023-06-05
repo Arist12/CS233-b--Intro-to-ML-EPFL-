@@ -4,6 +4,7 @@ import numpy as np
 # Generaly utilies
 ##################
 
+
 def label_to_onehot(labels, C=None):
     """
     Transform the labels into one-hot representations.
@@ -22,6 +23,7 @@ def label_to_onehot(labels, C=None):
     one_hot_labels[np.arange(N), labels.astype(int)] = 1
     return one_hot_labels
 
+
 def onehot_to_label(onehot):
     """
     Transform the labels from one-hot to class index.
@@ -33,6 +35,7 @@ def onehot_to_label(onehot):
     """
     return np.argmax(onehot, axis=1)
 
+
 def append_bias_term(data):
     """
     Append to the data a bias term equal to 1.
@@ -43,8 +46,9 @@ def append_bias_term(data):
         (array): shape (N,D+1)
     """
     N = data.shape[0]
-    data = np.concatenate([np.ones([N, 1]),data], axis=1)
+    data = np.concatenate([np.ones([N, 1]), data], axis=1)
     return data
+
 
 def normalize_fn(data, means, stds):
     """
@@ -60,6 +64,7 @@ def normalize_fn(data, means, stds):
     # return the normalized features
     return (data - means) / stds
 
+
 def get_n_classes(labels):
     """
     Return the number of classes present in the data labels.
@@ -72,35 +77,38 @@ def get_n_classes(labels):
 # Metrics
 #########
 
+
 def accuracy_fn(pred_labels, gt_labels):
     """
     Return the accuracy of the predicted labels.
     """
-    return np.mean(pred_labels == gt_labels) * 100.
+    return np.mean(pred_labels == gt_labels) * 100.0
+
 
 def macrof1_fn(pred_labels, gt_labels):
     """Return the macro F1-score."""
     class_ids = np.unique(gt_labels)
     macrof1 = 0
     for val in class_ids:
-        predpos = (pred_labels == val)
-        gtpos = (gt_labels==val)
+        predpos = pred_labels == val
+        gtpos = gt_labels == val
 
-        tp = sum(predpos*gtpos)
-        fp = sum(predpos*~gtpos)
-        fn = sum(~predpos*gtpos)
+        tp = sum(predpos * gtpos)
+        fp = sum(predpos * ~gtpos)
+        fn = sum(~predpos * gtpos)
         if tp == 0:
             continue
         else:
-            precision = tp/(tp+fp)
-            recall = tp/(tp+fn)
+            precision = tp / (tp + fp)
+            recall = tp / (tp + fn)
 
-        macrof1 += 2*(precision*recall)/(precision+recall)
+        macrof1 += 2 * (precision * recall) / (precision + recall)
 
-    return macrof1/len(class_ids)
+    return macrof1 / len(class_ids)
+
 
 def KFold_cross_validation(X, Y, K, method_obj):
-    '''
+    """
     K-Fold Cross validation function for K-NN
 
     Inputs:
@@ -109,15 +117,15 @@ def KFold_cross_validation(X, Y, K, method_obj):
         K: number of folds (K in K-fold)
     Returns:
         Average validation accuracy for the selected k.
-    '''
+    """
     N = X.shape[0]
     accuracies = []  # list of accuracies
     F1 = []
 
     for fold_ind in range(K):
-        #Split the data into training and validation folds:
+        # Split the data into training and validation folds:
 
-        #all the indices of the training dataset
+        # all the indices of the training dataset
         all_ind = np.arange(N)
         split_size = N // K
 
@@ -140,7 +148,7 @@ def KFold_cross_validation(X, Y, K, method_obj):
         accuracies.append(acc)
         F1.append(macrof1)
 
-    #Find the average validation accuracy over K:
+    # Find the average validation accuracy over K:
     ave_acc = sum(accuracies) / K
     avg_f1 = sum(F1) / K
     print(f"Test set:  accuracy = {ave_acc:.3f}% - F1-score = {avg_f1:.6f}")

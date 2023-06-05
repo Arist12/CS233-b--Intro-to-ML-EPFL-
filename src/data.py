@@ -6,9 +6,9 @@ from PIL import Image
 def _load_images_from_directory(dir):
     images = []
     for imagestr in sorted(os.listdir(dir)):
-        if imagestr.endswith('.png'):
-            image = Image.open(os.path.join(dir, imagestr)).convert('L')
-            images.append(np.asarray(image) / 255.)
+        if imagestr.endswith(".png"):
+            image = Image.open(os.path.join(dir, imagestr)).convert("L")
+            images.append(np.asarray(image) / 255.0)
     return np.array(images)
 
 
@@ -24,21 +24,21 @@ def load_data(directory):
         train_labels (array): labels of the train set, of shape (N,)
         test_labels (array): labels of the test set, of shape (N',)
     """
-    train_images = _load_images_from_directory(os.path.join(directory, 'train_images'))
-    test_images = _load_images_from_directory(os.path.join(directory, 'test_images'))
+    train_images = _load_images_from_directory(os.path.join(directory, "train_images"))
+    test_images = _load_images_from_directory(os.path.join(directory, "test_images"))
 
-    train_labels = np.loadtxt(os.path.join(directory, 'train_labels.csv'), dtype=int)
-    test_labels = np.loadtxt(os.path.join(directory, 'test_labels.csv'), dtype=int)
+    train_labels = np.loadtxt(os.path.join(directory, "train_labels.csv"), dtype=int)
+    test_labels = np.loadtxt(os.path.join(directory, "test_labels.csv"), dtype=int)
 
     return train_images, test_images, train_labels, test_labels
 
 
 if __name__ == "__main__":
-    print('Testing data loading...')
+    print("Testing data loading...")
 
-    xtrain, xtest, ytrain, ytest = load_data('../dataset_HASYv2')
+    xtrain, xtest, ytrain, ytest = load_data("../dataset_HASYv2")
 
     print(xtrain.shape, xtest.shape)
     print(ytrain.shape, ytest.shape)
 
-    print('Done!')
+    print("Done!")

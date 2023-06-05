@@ -11,7 +11,7 @@ class SVM(object):
     SVM method.
     """
 
-    def __init__(self, C, kernel, gamma=1., degree=1, coef0=0.):
+    def __init__(self, C, kernel, gamma=1.0, degree=1, coef0=0.0):
         """
         Initialize the new object (see dummy_methods.py)
         and set its arguments.
@@ -25,13 +25,12 @@ class SVM(object):
         """
         self.C = C
         self.kernel = kernel
-        if kernel == 'rbf':
-            self.clf = SVC(kernel='rbf', C=C, gamma=gamma)
-        elif kernel == 'poly':
-            self.clf = SVC(kernel='poly', C=C, gamma=gamma, degree=degree, coef0=coef0)
+        if kernel == "rbf":
+            self.clf = SVC(kernel="rbf", C=C, gamma=gamma)
+        elif kernel == "poly":
+            self.clf = SVC(kernel="poly", C=C, gamma=gamma, degree=degree, coef0=coef0)
         else:
-            self.clf = SVC(kernel='linear', C=C)
-
+            self.clf = SVC(kernel="linear", C=C)
 
     def fit(self, training_data, training_labels):
         """

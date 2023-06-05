@@ -2,6 +2,7 @@ import numpy as np
 
 ## MS2
 
+
 class PCA(object):
     """
     PCA dimensionality reduction class.
@@ -50,11 +51,11 @@ class PCA(object):
         eigvals, eigvecs = np.linalg.eigh(C)
 
         eigvals = eigvals[::-1]
-        eg = eigvals[:self.d]
+        eg = eigvals[: self.d]
         exvar = np.sum(eg) / np.sum(eigvals) * 100
 
         eigvecs = eigvecs[:, ::-1]
-        self.W = eigvecs[:, :self.d]
+        self.W = eigvecs[:, : self.d]
         return exvar
 
     def reduce_dimension(self, data):
@@ -73,5 +74,3 @@ class PCA(object):
         ##
         data_reduced = (data - self.mean) @ self.W
         return data_reduced
-
-

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class KMeans(object):
     """
     K-Means clustering class.
@@ -36,9 +37,11 @@ class KMeans(object):
         centers = self.init_centers(data, self.K)
 
         for i in range(max_iter):
-            if ((i+1) % 10 == 0):
+            if (i + 1) % 10 == 0:
                 print(f"Iteration {i+1}/{max_iter}...")
-            old_centers = centers.copy()  # keep in memory the centers of the previous iteration
+            old_centers = (
+                centers.copy()
+            )  # keep in memory the centers of the previous iteration
 
             distances = self.compute_distance(data, old_centers)
             cluster_assignments = self.find_closest_cluster(distances)
@@ -129,9 +132,9 @@ class KMeans(object):
         N = data.shape[0]
         K = centers.shape[0]
 
-        distances = np.zeros((N,K))
+        distances = np.zeros((N, K))
         for k in range(K):
-            distances[:, k] = np.sqrt(np.sum((data-centers[k])**2, axis=1))
+            distances[:, k] = np.sqrt(np.sum((data - centers[k]) ** 2, axis=1))
         return distances
 
     def compute_centers(self, data, cluster_assignments, K):
@@ -147,7 +150,7 @@ class KMeans(object):
         """
         centers = np.zeros((K, data.shape[-1]))
         for k in range(K):
-            centers[k] = np.mean(data[cluster_assignments == k], axis = 0)
+            centers[k] = np.mean(data[cluster_assignments == k], axis=0)
         return centers
 
     def find_closest_cluster(self, distances):

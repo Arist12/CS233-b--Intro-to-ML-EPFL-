@@ -6,6 +6,7 @@ from torch.utils.data import TensorDataset, DataLoader
 
 ## MS2
 
+
 class MLP(nn.Module):
     """
     An MLP network which does classification.
@@ -96,7 +97,9 @@ class CNN(nn.Module):
         ###
         ##
         self.net = nn.Sequential(
-            nn.Conv2d(in_channels=input_channels, out_channels=8, kernel_size=7, padding=3),
+            nn.Conv2d(
+                in_channels=input_channels, out_channels=8, kernel_size=3, padding=1
+            ),
             nn.BatchNorm2d(8),
             nn.ReLU(),
             nn.AvgPool2d(2),
@@ -109,7 +112,7 @@ class CNN(nn.Module):
             nn.ReLU(),
             nn.Linear(512, 128),
             nn.ReLU(),
-            nn.Linear(128, n_classes)
+            nn.Linear(128, n_classes),
         )
 
     def forward(self, x):
@@ -229,7 +232,7 @@ class Trainer(object):
                 if self.cnn:
                     batch = batch.unsqueeze(1)
                 logits = self.model(batch)
-                pred_labels = torch.concat([pred_labels, logits], dim = 0)
+                pred_labels = torch.concat([pred_labels, logits], dim=0)
 
         return pred_labels.argmax(dim=1)
 
@@ -246,9 +249,12 @@ class Trainer(object):
             pred_labels (array): target of shape (N,)
         """
         # First, prepare data for pytorch
-        train_dataset = TensorDataset(torch.from_numpy(training_data).float(),
-                                      torch.from_numpy(training_labels))
-        train_dataloader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True)
+        train_dataset = TensorDataset(
+            torch.from_numpy(training_data).float(), torch.from_numpy(training_labels)
+        )
+        train_dataloader = DataLoader(
+            train_dataset, batch_size=self.batch_size, shuffle=True
+        )
 
         self.train_all(train_dataloader)
 
@@ -267,7 +273,9 @@ class Trainer(object):
         """
         # First, prepare data for pytorch
         test_dataset = TensorDataset(torch.from_numpy(test_data).float())
-        test_dataloader = DataLoader(test_dataset, batch_size=self.batch_size, shuffle=False)
+        test_dataloader = DataLoader(
+            test_dataset, batch_size=self.batch_size, shuffle=False
+        )
 
         pred_labels = self.predict_torch(test_dataloader)
 
